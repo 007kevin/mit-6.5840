@@ -1,10 +1,12 @@
 package mr
 
-import "fmt"
-import "log"
-import "net/rpc"
-import "hash/fnv"
-
+import (
+	"fmt"
+	"hash/fnv"
+	"log"
+	"net/rpc"
+	"time"
+)
 
 //
 // Map functions return a slice of KeyValue.
@@ -28,15 +30,37 @@ func ihash(key string) int {
 //
 // main/mrworker.go calls this function.
 //
-func Worker(mapf func(string, string) []KeyValue,
+func Worker(
+	mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
-
-	// Your worker implementation here.
-
-	// uncomment to send the Example RPC to the coordinator.
-	// CallExample()
-
+	for !run(mapf, reducef) {
+		time.Sleep(time.Second)
+	}
 }
+
+func run(
+	mapf func(string, string) []KeyValue,
+	reducef func(string, []string) string) bool {
+	resp := &GetTaskResponse{}
+	ok := call("Coordinator.GetTask", &GetTaskRequest{}, resp)
+	if !ok {
+		fmt.Printf("CallGetTask failed!\n")
+		return true
+	}
+
+	if resp.Type == TERMINATE {
+		return false
+	}
+
+	if resp.Type == WAIT {
+		return true
+	}
+
+
+
+	return true
+}
+
 
 //
 // example function to show how to make an RPC call to the coordinator.
