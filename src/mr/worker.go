@@ -33,7 +33,7 @@ func ihash(key string) int {
 func Worker(
 	mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
-	for !run(mapf, reducef) {
+	for run(mapf, reducef) {
 		time.Sleep(time.Second)
 	}
 }
@@ -44,7 +44,7 @@ func run(
 	resp := &GetTaskResponse{}
 	ok := call("Coordinator.GetTask", &GetTaskRequest{}, resp)
 	if !ok {
-		fmt.Printf("CallGetTask failed!\n")
+		fmt.Printf("call GetTask failed!\n")
 		return true
 	}
 
@@ -56,7 +56,16 @@ func run(
 		return true
 	}
 
+	fmt.Printf("Received Type %d, Id %d\n", resp.Type, resp.Id)
 
+	ok = call("Coordinator.CompleteTask", &CompleteTaskRequest{
+		Id: resp.Id,
+		Type: resp.Type,
+	}, &CompleteTaskResponse{})
+	if !ok {
+		fmt.Printf("call CompleteTask failed!\n")
+		return true
+	}
 
 	return true
 }
