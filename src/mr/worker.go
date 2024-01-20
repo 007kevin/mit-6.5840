@@ -1,10 +1,15 @@
 package mr
 
 import (
+	"encoding/json"
 	"fmt"
 	"hash/fnv"
+	"io/ioutil"
 	"log"
 	"net/rpc"
+	"os"
+	"path/filepath"
+	"sort"
 	"time"
 )
 
@@ -54,6 +59,100 @@ func run(
 
 	if resp.Type == WAIT {
 		return true
+	}
+
+	if resp.Type == MAP {
+		filename := resp.Key
+		file, err := os.Open(resp.Key)
+		if err != nil {
+			fmt.Printf("cannot open %s: %s", filename, err.Error())
+			return true
+		}
+		content, err := ioutil.ReadAll(file)
+		if err != nil {
+			fmt.Printf("cannot read %s: %s", filename, err.Error())
+			return true
+		}
+		file.Close()
+		kva := mapf(filename, string(content))
+		tmpname := fmt.Sprintf("mr-%d-%d.tmp%d.json", resp.Id, ihash(resp.Key) % resp.NReduce, time.Now().Unix())
+		finalname := fmt.Sprintf("mr-%d-%d.json", resp.Id, ihash(resp.Key) % resp.NReduce)
+		ofile, err := os.Create(tmpname)
+		if err != nil {
+			fmt.Printf("cannot create file %s: %s", tmpname, err.Error())
+			return true
+		}
+		enc := json.NewEncoder(ofile)
+		for _, kv := range(kva) {
+			err := enc.Encode(&kv)
+			if err != nil {
+				fmt.Printf("cannot encode %s: %s", tmpname, err.Error())
+				return true
+			}
+		}
+		err = ofile.Close()
+		if err != nil {
+			fmt.Printf("cannot close file %s: %s", tmpname, err.Error())
+			return true
+		}
+		err = os.Rename(tmpname, finalname)
+		if err != nil {
+			fmt.Printf("could not rename file %s to %s: %s", tmpname, finalname, err.Error())
+			return true
+		}
+	} else {
+		filepattern := fmt.Sprintf("mr-*-%d.json", resp.Id)
+		filenames, err := filepath.Glob(filepattern)
+		tmpname := fmt.Sprintf("mr-out-%d.%d", resp.Id, time.Now().Unix())
+		finalname := fmt.Sprintf("mr-out-%d", resp.Id)
+		if err != nil {
+			fmt.Printf("cannot glob pattern %s: %s", filepattern, err.Error())
+			return true
+		}
+		kvm := make(map[string][]string)
+		for _, filename := range(filenames) {
+			file, err := os.Open(filename)
+			if err != nil {
+				fmt.Printf("cannot read file %s: %s", filename, err.Error())
+				return true
+			}
+			dec := json.NewDecoder(file)
+			for {
+				var kv KeyValue
+				if err := dec.Decode(&kv); err != nil {
+					break
+				}
+				kvm[kv.Key] = append(kvm[kv.Key], kv.Value)
+			}
+			err = file.Close()
+			if err != nil {
+				fmt.Printf("cannot close file %s: %s", filename, err.Error())
+				return true
+			}
+		}
+		keys := make([]string, 0, len(kvm))
+		for key := range kvm {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		ofile, err := os.Create(tmpname)
+		if err != nil {
+			fmt.Printf("cannot create file %s: %s", tmpname, err.Error())
+			return true
+		}
+		for _, key := range keys {
+			output := reducef(key, kvm[key])
+			_, err := fmt.Fprintf(ofile, "%s %s\n", key, output)
+			if err != nil {
+				fmt.Printf("cannot write value to file %s: %s", tmpname, err.Error())
+			}
+		}
+		err = ofile.Close()
+		err = os.Rename(tmpname, finalname)
+		if err != nil {
+			fmt.Printf("could not rename file %s to %s: %s", tmpname, finalname, err.Error())
+			return true
+		}
 	}
 
 	fmt.Printf("Received Type %d, Id %d\n", resp.Type, resp.Id)
