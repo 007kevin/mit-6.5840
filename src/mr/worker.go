@@ -75,29 +75,19 @@ func run(
 		}
 		file.Close()
 		kva := mapf(filename, string(content))
-		tmpname := fmt.Sprintf("mr-%d-%d.tmp%d.json", resp.Id, ihash(resp.Key) % resp.NReduce, time.Now().Unix())
-		finalname := fmt.Sprintf("mr-%d-%d.json", resp.Id, ihash(resp.Key) % resp.NReduce)
-		ofile, err := os.Create(tmpname)
-		if err != nil {
-			fmt.Printf("cannot create file %s: %s", tmpname, err.Error())
-			return true
-		}
-		enc := json.NewEncoder(ofile)
+		fm := FileMapper{
+			MapId: resp.Id,
+			files: make(map[int]*os.File)}
 		for _, kv := range(kva) {
-			err := enc.Encode(&kv)
+			err := fm.WriteKv(ihash(kv.Key) % resp.NReduce, &kv)
 			if err != nil {
-				fmt.Printf("cannot encode %s: %s", tmpname, err.Error())
+				fmt.Printf("cannot encode: %s", err.Error())
 				return true
 			}
 		}
-		err = ofile.Close()
+		err = fm.Commit()
 		if err != nil {
-			fmt.Printf("cannot close file %s: %s", tmpname, err.Error())
-			return true
-		}
-		err = os.Rename(tmpname, finalname)
-		if err != nil {
-			fmt.Printf("could not rename file %s to %s: %s", tmpname, finalname, err.Error())
+			fmt.Printf("cannot close file mapper: %s", err.Error())
 			return true
 		}
 	} else {
