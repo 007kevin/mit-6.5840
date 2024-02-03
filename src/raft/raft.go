@@ -205,10 +205,10 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // look at the comments in ../labrpc/labrpc.go for more details.
 //
 func (rf *Raft) requestVotes(args *RequestVoteArgs, reply *RequestVoteReply) {
-	var voted int
+	voted := 1 // count current candidate's vote
 	for i := range(rf.peers) {
 		if (i == rf.me) {
-			continue
+			continue;
 		}
 		var r RequestVoteReply
 		if rf.sendRequestVote(i, args, &r) {
@@ -224,6 +224,7 @@ func (rf *Raft) requestVotes(args *RequestVoteArgs, reply *RequestVoteReply) {
 		}
 	}
 	reply.Term = args.Term
+	fmt.Printf("[DEBUG] request votes verdict %d/%d\n", voted, len(rf.peers))
 	if voted > len(rf.peers)/2 {
 		reply.VoteGranted = true
 	} else {
@@ -340,6 +341,7 @@ func (rf *Raft) killed() bool {
 
 func (rf *Raft) ticker() {
 	for rf.killed() == false {
+
 		log.Println(rf.string())
 		// Your code here (2A)
 		switch rf.get() {
@@ -409,8 +411,10 @@ func (rf *Raft) incTerm() {
 func (rf *Raft) setTerm(term int) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	assertf(rf.currentTerm <= term,
-		"cannot set term %d less than current %d", term, rf.currentTerm)
+	if rf.currentTerm > term {
+		log.Printf("cannot set term %d less than current %d: %s", term, rf.currentTerm, rf.string())
+		return
+	}
 	rf.currentTerm = term
 }
 
@@ -433,9 +437,8 @@ func assertf(cond bool, format string, v ...interface{}) {
 }
 
 func (rf *Raft) string() string {
-	return fmt.Sprintf("[me:%d, dead:%d, is:%s, currentTerm:%d, votedFor: %d]",
+	return fmt.Sprintf("[me:%d, is:%s, currentTerm:%d, votedFor: %d]",
 		rf.me,
-		rf.dead,
 		rf.is,
 		rf.currentTerm,
 		rf.votedFor,
