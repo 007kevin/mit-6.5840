@@ -153,6 +153,8 @@ type RequestVoteReply struct {
 
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = false
@@ -165,6 +167,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.votedFor = args.CandidateId
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
+		 // reset election timer if vote granted
+		atomic.StoreInt32(&rf.heartbeat, 1);
 		return
 	}
 
@@ -174,6 +178,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	if rf.votedFor == args.CandidateId {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
+		 // reset election timer if vote granted
+		atomic.StoreInt32(&rf.heartbeat, 1);
 		return
 	}
 
@@ -224,7 +230,7 @@ func (rf *Raft) requestVotes(args *RequestVoteArgs, reply *RequestVoteReply) {
 		}
 	}
 	reply.Term = args.Term
-	fmt.Printf("[DEBUG] request votes verdict %d/%d\n", voted, len(rf.peers))
+	fmt.Printf("DEBUG request votes verdict %d/%d\n", voted, len(rf.peers))
 	if voted > len(rf.peers)/2 {
 		reply.VoteGranted = true
 	} else {
@@ -255,6 +261,8 @@ type AppendEntriesReply struct {
 }
 
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
 		reply.Success = false
@@ -276,6 +284,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 func (rf *Raft) appendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	for i := range(rf.peers) {
+		if i == rf.me {
+			continue;
+		}
 		var r AppendEntriesReply
 		if rf.sendAppendEntries(i, args, &r) {
 			if (r.Term > args.Term) {
@@ -342,65 +353,73 @@ func (rf *Raft) killed() bool {
 func (rf *Raft) ticker() {
 	for rf.killed() == false {
 
-		log.Println(rf.string())
 		// Your code here (2A)
-		switch rf.get() {
-		case LEADER:
-			var reply AppendEntriesReply
-			rf.appendEntries(&AppendEntriesArgs{
-				Term: rf.currentTerm,
-				LeaderId: rf.me,
-			}, &reply)
-			if reply.Term > rf.currentTerm {
-				rf.setTerm(reply.Term)
-				rf.set(FOLLOWER)
-				randomSleep()
-			} else {
-				sleep()
-			}
-		case CANDIDATE:
-			rf.votedFor = rf.me
-			var reply RequestVoteReply
-			rf.requestVotes(&RequestVoteArgs{
-				Term: rf.currentTerm,
-				CandidateId: rf.votedFor,
-			}, &reply)
-			if !reply.VoteGranted || reply.Term > rf.currentTerm {
-				rf.setTerm(reply.Term)
-				rf.set(FOLLOWER)
-				randomSleep()
-			} else {
-				assertf(reply.Term == rf.currentTerm,
-					"current term %d does not match request vote reply %d",
-					rf.currentTerm,
-					reply.Term)
-				rf.set(LEADER)
-				// roll over to leader without pause
-			}
-		case FOLLOWER:
-			// Check if a leader election should be started.
-			h := atomic.LoadInt32(&rf.heartbeat);
-			if h == 0 {
-				rf.set(CANDIDATE)
-				rf.incTerm()
-				// roll over to candiate without paise
-			} else {
-				atomic.StoreInt32(&rf.heartbeat, 0);
-				randomSleep()
-			}
-		}
+		rf.mu.Lock()
+		ms := rf.tick()
+		rf.mu.Unlock()
+		time.Sleep(ms)
 	}
 }
 
+func (rf *Raft) tick() time.Duration {
+	fmt.Println("DEBUG tick: " + rf.string())
+	switch rf.get() {
+	case LEADER:
+		var reply AppendEntriesReply
+		rf.appendEntries(&AppendEntriesArgs{
+			Term: rf.currentTerm,
+			LeaderId: rf.me,
+		}, &reply)
+		if reply.Term > rf.currentTerm {
+			rf.setTerm(reply.Term)
+			rf.set(FOLLOWER)
+			return randomSleep()
+		} else {
+			return sleep()
+		}
+	case CANDIDATE:
+		rf.votedFor = rf.me
+		var reply RequestVoteReply
+		rf.requestVotes(&RequestVoteArgs{
+			Term: rf.currentTerm,
+			CandidateId: rf.votedFor,
+		}, &reply)
+		if !reply.VoteGranted || reply.Term > rf.currentTerm {
+			rf.setTerm(reply.Term)
+			rf.set(FOLLOWER)
+			return randomSleep()
+		} else {
+			assertf(reply.Term == rf.currentTerm,
+				"current term %d does not match request vote reply %d",
+				rf.currentTerm,
+				reply.Term)
+			rf.set(LEADER)
+			// roll over to leader without pause
+			return rf.tick()
+		}
+	case FOLLOWER:
+		// Check if a leader election should be started.
+		h := atomic.LoadInt32(&rf.heartbeat);
+		if h == 0 {
+			rf.set(CANDIDATE)
+			rf.incTerm()
+			// reset election timer if starting election
+			atomic.StoreInt32(&rf.heartbeat, 1);
+			// roll over to candiate without pause
+			return rf.tick()
+		} else {
+			atomic.StoreInt32(&rf.heartbeat, 0);
+			return randomSleep()
+		}
+	}
+	panic("tick did not evaluate")
+}
+
 func (rf *Raft) set(state string) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
 	rf.is = state
 }
 
 func (rf *Raft) get() string {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
 	return rf.is
 }
 
@@ -409,8 +428,6 @@ func (rf *Raft) incTerm() {
 }
 
 func (rf *Raft) setTerm(term int) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
 	if rf.currentTerm > term {
 		log.Printf("cannot set term %d less than current %d: %s", term, rf.currentTerm, rf.string())
 		return
@@ -418,16 +435,16 @@ func (rf *Raft) setTerm(term int) {
 	rf.currentTerm = term
 }
 
-func randomSleep() {
+func randomSleep() time.Duration {
 	// Pause for a random amount of time between 50 and 350 ms
 	ms := 50 + (rand.Int63() % 300)
-	time.Sleep(time.Duration(ms) * time.Millisecond)
+	return time.Duration(ms) * time.Millisecond
 }
 
-func sleep() {
+func sleep() time.Duration {
 	// Idle sleep for the leader. Must be less than randomSleep
 	ms := 25
-	time.Sleep(time.Duration(ms) * time.Millisecond)
+	return time.Duration(ms) * time.Millisecond
 }
 
 func assertf(cond bool, format string, v ...interface{}) {
