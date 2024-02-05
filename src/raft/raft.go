@@ -153,8 +153,7 @@ type RequestVoteReply struct {
 
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
+	fmt.Println("DEBUG got request: " + rf.string())
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = false
@@ -162,6 +161,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term > rf.currentTerm {
+		//		rf.mu.Lock()
 		rf.set(FOLLOWER)
 		rf.setTerm(args.Term)
 		rf.votedFor = args.CandidateId
@@ -169,6 +169,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.VoteGranted = true
 		 // reset election timer if vote granted
 		atomic.StoreInt32(&rf.heartbeat, 1);
+		//		rf.mu.Unlock()
 		return
 	}
 
@@ -214,7 +215,7 @@ func (rf *Raft) requestVotes(args *RequestVoteArgs, reply *RequestVoteReply) {
 	voted := 1 // count current candidate's vote
 	for i := range(rf.peers) {
 		if (i == rf.me) {
-			continue;
+			continue; // make sure to skip itself to avoid deadlock
 		}
 		var r RequestVoteReply
 		if rf.sendRequestVote(i, args, &r) {
@@ -285,7 +286,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 func (rf *Raft) appendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	for i := range(rf.peers) {
 		if i == rf.me {
-			continue;
+			continue; // make sure to skip itself to avoid deadlock
 		}
 		var r AppendEntriesReply
 		if rf.sendAppendEntries(i, args, &r) {
@@ -380,6 +381,7 @@ func (rf *Raft) tick() time.Duration {
 	case CANDIDATE:
 		rf.votedFor = rf.me
 		var reply RequestVoteReply
+		fmt.Println("DEBUG tick requesting votes")
 		rf.requestVotes(&RequestVoteArgs{
 			Term: rf.currentTerm,
 			CandidateId: rf.votedFor,
@@ -390,12 +392,13 @@ func (rf *Raft) tick() time.Duration {
 			return randomSleep()
 		} else {
 			assertf(reply.Term == rf.currentTerm,
-				"current term %d does not match request vote reply %d",
+				"current term %d does not match request vote reply %d: %s",
 				rf.currentTerm,
-				reply.Term)
+				reply.Term,
+				rf.string())
 			rf.set(LEADER)
 			// roll over to leader without pause
-			return rf.tick()
+			return 0
 		}
 	case FOLLOWER:
 		// Check if a leader election should be started.
@@ -406,7 +409,7 @@ func (rf *Raft) tick() time.Duration {
 			// reset election timer if starting election
 			atomic.StoreInt32(&rf.heartbeat, 1);
 			// roll over to candiate without pause
-			return rf.tick()
+			return 0
 		} else {
 			atomic.StoreInt32(&rf.heartbeat, 0);
 			return randomSleep()
