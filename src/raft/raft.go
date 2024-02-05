@@ -161,7 +161,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term > rf.currentTerm {
-		//		rf.mu.Lock()
+		rf.mu.Lock()
 		rf.set(FOLLOWER)
 		rf.setTerm(args.Term)
 		rf.votedFor = args.CandidateId
@@ -169,7 +169,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.VoteGranted = true
 		 // reset election timer if vote granted
 		atomic.StoreInt32(&rf.heartbeat, 1);
-		//		rf.mu.Unlock()
+		rf.mu.Unlock()
 		return
 	}
 
@@ -355,9 +355,7 @@ func (rf *Raft) ticker() {
 	for rf.killed() == false {
 
 		// Your code here (2A)
-		rf.mu.Lock()
 		ms := rf.tick()
-		rf.mu.Unlock()
 		time.Sleep(ms)
 	}
 }
@@ -371,11 +369,14 @@ func (rf *Raft) tick() time.Duration {
 			Term: rf.currentTerm,
 			LeaderId: rf.me,
 		}, &reply)
+		rf.mu.Lock()
 		if reply.Term > rf.currentTerm {
 			rf.setTerm(reply.Term)
 			rf.set(FOLLOWER)
+			rf.mu.Unlock()
 			return randomSleep()
 		} else {
+			rf.mu.Unlock()
 			return sleep()
 		}
 	case CANDIDATE:
@@ -386,9 +387,11 @@ func (rf *Raft) tick() time.Duration {
 			Term: rf.currentTerm,
 			CandidateId: rf.votedFor,
 		}, &reply)
+		rf.mu.Lock()
 		if !reply.VoteGranted || reply.Term > rf.currentTerm {
 			rf.setTerm(reply.Term)
 			rf.set(FOLLOWER)
+			rf.mu.Unlock()
 			return randomSleep()
 		} else {
 			assertf(reply.Term == rf.currentTerm,
@@ -397,6 +400,7 @@ func (rf *Raft) tick() time.Duration {
 				reply.Term,
 				rf.string())
 			rf.set(LEADER)
+			rf.mu.Unlock()
 			// roll over to leader without pause
 			return 0
 		}
@@ -404,8 +408,10 @@ func (rf *Raft) tick() time.Duration {
 		// Check if a leader election should be started.
 		h := atomic.LoadInt32(&rf.heartbeat);
 		if h == 0 {
+			rf.mu.Lock()
 			rf.set(CANDIDATE)
 			rf.incTerm()
+			rf.mu.Unlock()
 			// reset election timer if starting election
 			atomic.StoreInt32(&rf.heartbeat, 1);
 			// roll over to candiate without pause
