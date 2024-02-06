@@ -153,10 +153,10 @@ type RequestVoteReply struct {
 
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
-	fmt.Println("DEBUG got request: " + rf.string())
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = false
+		fmt.Println("DEBUG got request: " + rf.string() + " -> no vote (1)")
 		return
 	}
 
@@ -170,6 +170,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		 // reset election timer if vote granted
 		atomic.StoreInt32(&rf.heartbeat, 1);
 		rf.mu.Unlock()
+		fmt.Println("DEBUG got request: " + rf.string() + " -> yes vote (1)")
 		return
 	}
 
@@ -181,11 +182,13 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.VoteGranted = true
 		 // reset election timer if vote granted
 		atomic.StoreInt32(&rf.heartbeat, 1);
+		fmt.Println("DEBUG got request: " + rf.string() + " -> yes vote (2)")
 		return
 	}
 
 	reply.Term = rf.currentTerm
 	reply.VoteGranted = false
+	fmt.Println("DEBUG got request: " + rf.string() + " -> no vote (2)")
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -212,31 +215,45 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // look at the comments in ../labrpc/labrpc.go for more details.
 //
 func (rf *Raft) requestVotes(args *RequestVoteArgs, reply *RequestVoteReply) {
-	voted := 1 // count current candidate's vote
+	ch := make(chan *RequestVoteReply)
 	for i := range(rf.peers) {
 		if (i == rf.me) {
 			continue; // make sure to skip itself to avoid deadlock
 		}
-		var r RequestVoteReply
-		if rf.sendRequestVote(i, args, &r) {
-			if (r.Term < args.Term){
-				continue;
+		go func(i int) {
+			var r RequestVoteReply
+			if rf.sendRequestVote(i, args, &r) {
+				ch <- &r
+			} else {
+				ch <- &RequestVoteReply{VoteGranted: false, Term: -1}
 			}
-			if (r.Term > args.Term) {
-				reply.Term = r.Term
-				reply.VoteGranted = r.VoteGranted
-				return
-			}
-			voted = voted + 1
+		}(i)
+	}
+	voted := 1 // count current candidate's vote
+	for i := 0; i < len(rf.peers); i++ {
+		r := <-ch
+		if (r.Term < args.Term){
+			continue;
+		}
+		if (r.Term > args.Term) {
+			reply.Term = r.Term
+			reply.VoteGranted = r.VoteGranted
+			return
+		}
+		if r.VoteGranted {
+			voted++
+		}
+		//		fmt.Printf("voted: %v %v %v\n" ,voted, reply.VoteGranted, reply.Term)
+		if voted > len(rf.peers)/2 {
+			reply.Term = args.Term
+			reply.VoteGranted = true
+			fmt.Printf("DEBUG request votes verdict %d/%d\n", voted, len(rf.peers))
+			return
 		}
 	}
-	reply.Term = args.Term
 	fmt.Printf("DEBUG request votes verdict %d/%d\n", voted, len(rf.peers))
-	if voted > len(rf.peers)/2 {
-		reply.VoteGranted = true
-	} else {
-		reply.VoteGranted = false
-	}
+	reply.Term = args.Term
+	reply.VoteGranted = false
 }
 
 // if you're having trouble getting RPC to work, check that you've
@@ -262,8 +279,6 @@ type AppendEntriesReply struct {
 }
 
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
 	if args.Term < rf.currentTerm {
 		reply.Term = rf.currentTerm
 		reply.Success = false
@@ -273,8 +288,10 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	atomic.StoreInt32(&rf.heartbeat, 1);
 
 	if args.Term > rf.currentTerm {
+		rf.mu.Lock()
 		rf.set(FOLLOWER)
 		rf.setTerm(args.Term)
+		rf.mu.Unlock()
 		return
 	}
 
@@ -284,21 +301,39 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 }
 
 func (rf *Raft) appendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+	ch := make(chan *AppendEntriesReply)
 	for i := range(rf.peers) {
 		if i == rf.me {
 			continue; // make sure to skip itself to avoid deadlock
 		}
-		var r AppendEntriesReply
-		if rf.sendAppendEntries(i, args, &r) {
-			if (r.Term > args.Term) {
-				reply.Term = r.Term
-				reply.Success = r.Success
-				return
+		go func(i int) {
+			var r AppendEntriesReply
+			if rf.sendAppendEntries(i, args, &r){
+				ch <- &r
+			} else {
+				ch <- &AppendEntriesReply{Success: false, Term: -1}
 			}
+		}(i)
+	}
+	success := 1
+	for i := 0; i < len(rf.peers); i++ {
+		r := <-ch
+		if (r.Term > args.Term) {
+			reply.Term = r.Term
+			reply.Success = r.Success
+			return
+		}
+		if r.Success {
+			success++
+		}
+		if success > len(rf.peers)/2 {
+			reply.Term = args.Term
+			reply.Success = true
+			return
 		}
 	}
 	reply.Term = args.Term
-	reply.Success = true
+	reply.Success = false
 }
 
 func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
@@ -365,12 +400,12 @@ func (rf *Raft) tick() time.Duration {
 	switch rf.get() {
 	case LEADER:
 		var reply AppendEntriesReply
+		rf.mu.Lock()
 		rf.appendEntries(&AppendEntriesArgs{
 			Term: rf.currentTerm,
 			LeaderId: rf.me,
 		}, &reply)
-		rf.mu.Lock()
-		if reply.Term > rf.currentTerm {
+		if rf.get() != LEADER || reply.Term > rf.currentTerm {
 			rf.setTerm(reply.Term)
 			rf.set(FOLLOWER)
 			rf.mu.Unlock()
@@ -380,7 +415,6 @@ func (rf *Raft) tick() time.Duration {
 			return sleep()
 		}
 	case CANDIDATE:
-		rf.votedFor = rf.me
 		var reply RequestVoteReply
 		fmt.Println("DEBUG tick requesting votes")
 		rf.requestVotes(&RequestVoteArgs{
@@ -388,7 +422,7 @@ func (rf *Raft) tick() time.Duration {
 			CandidateId: rf.votedFor,
 		}, &reply)
 		rf.mu.Lock()
-		if !reply.VoteGranted || reply.Term > rf.currentTerm {
+		if rf.get() != CANDIDATE || !reply.VoteGranted || reply.Term > rf.currentTerm {
 			rf.setTerm(reply.Term)
 			rf.set(FOLLOWER)
 			rf.mu.Unlock()
@@ -410,6 +444,7 @@ func (rf *Raft) tick() time.Duration {
 		if h == 0 {
 			rf.mu.Lock()
 			rf.set(CANDIDATE)
+			rf.votedFor = rf.me
 			rf.incTerm()
 			rf.mu.Unlock()
 			// reset election timer if starting election

@@ -8,12 +8,15 @@ package raft
 // test with the original before submitting.
 //
 
-import "testing"
-import "fmt"
-import "time"
-import "math/rand"
-import "sync/atomic"
-import "sync"
+import (
+	"fmt"
+	"math/rand"
+	"strconv"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+)
 
 // The tester generously allows solutions to complete elections in one second
 // (much more than the paper's range of timeouts).
@@ -60,31 +63,43 @@ func TestReElection2A(t *testing.T) {
 	leader1 := cfg.checkOneLeader()
 
 	// if the leader disconnects, a new one should be elected.
+	fmt.Println("disconnecting " + strconv.Itoa(leader1))
 	cfg.disconnect(leader1)
 	cfg.checkOneLeader()
 
 	// if the old leader rejoins, that shouldn't
 	// disturb the new leader. and the old leader
 	// should switch to follower.
+	fmt.Println("reconnecting " + strconv.Itoa(leader1))
 	cfg.connect(leader1)
 	leader2 := cfg.checkOneLeader()
 
 	// if there's no quorum, no new leader should
 	// be elected.
+	fmt.Println("disabling quorium")
+	fmt.Println("disconnecting " + strconv.Itoa(leader2))
 	cfg.disconnect(leader2)
+	fmt.Println("disconnecting " + strconv.Itoa((leader2 + 1) % servers))
 	cfg.disconnect((leader2 + 1) % servers)
 	time.Sleep(2 * RaftElectionTimeout)
 
 	// check that the one connected server
 	// does not think it is the leader.
 	cfg.checkNoLeader()
+	fmt.Println("checked there is no leader")
 
 	// if a quorum arises, it should elect a leader.
+	fmt.Println("enabling quorium")
+	fmt.Println("reconnecting " + strconv.Itoa((leader2 + 1) % servers))
 	cfg.connect((leader2 + 1) % servers)
+	fmt.Println("checking there is one leader")
+	time.Sleep(10 * RaftElectionTimeout)
 	cfg.checkOneLeader()
 
 	// re-join of last node shouldn't prevent leader from existing.
+	fmt.Println("reconnecting " + strconv.Itoa(leader2) + ", expecting no leader change")
 	cfg.connect(leader2)
+
 	cfg.checkOneLeader()
 
 	cfg.end()
