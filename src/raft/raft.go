@@ -35,6 +35,8 @@ const (
 	LEADER = "LEADER"
 )
 
+const RPC_TIMEOUT = 300
+
 
 // as each Raft peer becomes aware that successive log entries are
 // committed, the peer should send an ApplyMsg to the service (or
@@ -198,15 +200,19 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
 	}
 	success := 1
 	for i := 0; i < len(rf.peers) - 1; i++ {
-		r := <-ch
-		if (r.Term > args.Term) {
-			return r.Term, false
-		}
-		if r.Success {
-			success++
-		}
-		if success > len(rf.peers)/2 {
-			return args.Term, true
+		select {
+		case r := <-ch:
+			if (r.Term > args.Term) {
+				return r.Term, false
+			}
+			if r.Success {
+				success++
+			}
+			if success > len(rf.peers)/2 {
+				return args.Term, true
+			}
+		case <-time.After(RPC_TIMEOUT * time.Millisecond):
+			continue
 		}
 	}
 	return args.Term, true
@@ -310,22 +316,25 @@ func (rf *Raft) startElection(d Data) (int, bool) {
 	}
 	voted := 1 // count current candidate's vote
 	for i := 0; i < len(rf.peers) - 1; i++ {
-		r := <-ch
-		if (r.Term < args.Term){
-			continue;
-		}
-		if (r.Term > args.Term) {
-			return r.Term, false
-		}
-		if r.VoteGranted {
-			voted++
-		}
-		if voted > len(rf.peers)/2 {
-			return r.Term, true
+		select {
+		case r := <-ch:
+			if (r.Term < args.Term){
+				continue;
+			}
+			if (r.Term > args.Term) {
+				return r.Term, false
+			}
+			if r.VoteGranted {
+				voted++
+			}
+			if voted > len(rf.peers)/2 {
+				return r.Term, true
+			}
+		case <-time.After(RPC_TIMEOUT * time.Millisecond):
+			continue
 		}
 	}
 	return args.Term, false
-
 }
 
 func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
@@ -380,8 +389,8 @@ func (rf *Raft) ticker() {
 
 		// Your code here (2A)
 		// Check if a leader election should be started.
+		fmt.Printf("DEBUG tick %s\n", rf.data.string())
 		d, ms := rf.tick(rf.data)
-		//		fmt.Printf("DEBUG tick/1 %s\n", rf.data.string())
 		rf.mu.Lock()
 		if d.currentTerm >= rf.data.currentTerm {
 			rf.data = d
@@ -406,41 +415,27 @@ func (rf *Raft) tick(d Data) (Data, time.Duration) {
 		}
 	case CANDIDATE:
 		term, elected := rf.startElection(d)
-		if !elected {
+		if term > d.currentTerm || !elected {
 			d.currentTerm = maxInt(term, d.currentTerm + 1)
 			d.votedFor = -1
 			d.state = FOLLOWER
 			d.heartbeat = 1
-			return d, rsleep()
-		}
-		if term > d.currentTerm || !elected {
-			d.currentTerm = term
-			d.votedFor = -1
-			d.state = FOLLOWER
-			d.heartbeat = 1
-			return d, rsleep()
+			return d, 0
 		}
 		d.state = LEADER
 		d.heartbeat = 1
-		return d, sleep()
+		return d, 0
 	case LEADER:
 		term, success := rf.sendEntries(&AppendEntriesArgs{
 			Term: d.currentTerm,
 			LeaderId: d.me,
 		})
-		if !success {
+		if term > d.currentTerm || !success {
 			d.currentTerm = maxInt(term, d.currentTerm + 1)
 			d.votedFor = -1
 			d.state = FOLLOWER
 			d.heartbeat = 1
-			return d, rsleep()
-		}
-		if term > d.currentTerm {
-			d.currentTerm = term
-			d.votedFor = -1
-			d.state = FOLLOWER
-			d.heartbeat = 1
-			return d, rsleep()
+			return d, 0
 		}
 		return d, sleep()
 	}
