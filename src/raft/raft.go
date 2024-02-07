@@ -20,7 +20,6 @@ package raft
 import (
 	//	"bytes"
 	"fmt"
-	"log"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -215,9 +214,6 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
 
 func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
 	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
-	if !ok {
-		log.Printf("Could not append entries to server %d: %s ", server, rf.data.string())
-	}
 	return ok
 }
 
@@ -251,7 +247,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.Term = args.Term
 		reply.VoteGranted = true
 		rf.mu.Unlock()
-		fmt.Println("vote granted " + rf.data.string() )
+		//		fmt.Println("vote granted " + rf.data.string() )
 		return
 	}
 
@@ -385,12 +381,12 @@ func (rf *Raft) ticker() {
 		// Your code here (2A)
 		// Check if a leader election should be started.
 		d, ms := rf.tick(rf.data)
-		fmt.Printf("DEBUG tick/1 %s\n", rf.data.string())
+		//		fmt.Printf("DEBUG tick/1 %s\n", rf.data.string())
 		rf.mu.Lock()
 		if d.currentTerm >= rf.data.currentTerm {
 			rf.data = d
 		}
-		fmt.Printf("DEBUG tick/2 %s\n\n", rf.data.string())
+		//		fmt.Printf("DEBUG tick/2 %s\n\n", rf.data.string())
 		rf.mu.Unlock()
 		time.Sleep(ms)
 	}
@@ -410,8 +406,14 @@ func (rf *Raft) tick(d Data) (Data, time.Duration) {
 		}
 	case CANDIDATE:
 		term, elected := rf.startElection(d)
+		if !elected {
+			d.currentTerm = maxInt(term, d.currentTerm + 1)
+			d.votedFor = -1
+			d.state = FOLLOWER
+			d.heartbeat = 1
+			return d, rsleep()
+		}
 		if term > d.currentTerm || !elected {
-
 			d.currentTerm = term
 			d.votedFor = -1
 			d.state = FOLLOWER
@@ -426,7 +428,14 @@ func (rf *Raft) tick(d Data) (Data, time.Duration) {
 			Term: d.currentTerm,
 			LeaderId: d.me,
 		})
-		if term > d.currentTerm || !success {
+		if !success {
+			d.currentTerm = maxInt(term, d.currentTerm + 1)
+			d.votedFor = -1
+			d.state = FOLLOWER
+			d.heartbeat = 1
+			return d, rsleep()
+		}
+		if term > d.currentTerm {
 			d.currentTerm = term
 			d.votedFor = -1
 			d.state = FOLLOWER
@@ -436,6 +445,13 @@ func (rf *Raft) tick(d Data) (Data, time.Duration) {
 		return d, sleep()
 	}
 	panic("did not evaluate: " + d.string())
+}
+
+func maxInt(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func sleep() time.Duration {
