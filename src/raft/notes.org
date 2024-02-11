@@ -1,0 +1,12 @@
+#+title: Notes
+
+https://www.youtube.com/watch?v=R2-9bsKmEbo
+
+On start failure, new leader is elected
+
+Questions:
+- What if the leader crashes after it has commited but hasn't
+  sent that commit sendEntry to the followers?
+  > the majority of the followers will at least has the operations in their log,
+    since the leader would not have commited if it didn't get the majority.
+  > servers who do not have commited entries can never become elected.

@@ -1291,3 +1291,29 @@ func TestSnapshotInit2D(t *testing.T) {
 	cfg.one(rand.Int(), servers, true)
 	cfg.end()
 }
+
+type D struct {
+	index []int
+}
+
+func (d *D) print(){
+	for _, v := range(d.index){
+		fmt.Printf("%v ", v)
+	}
+	fmt.Println()
+}
+
+func TestScratch(t *testing.T) {
+	d := D{}
+	d.index = append(d.index, 1)
+	d.print()
+	e := d
+	e.index[0] = 5
+	e.index = append(d.index, 1)
+	e.print()
+	d.index = append(d.index, 10)
+	d.index = append(d.index, 11)
+	d.index[1] = 99
+	d.print()
+	e.print()
+}
