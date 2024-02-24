@@ -88,8 +88,8 @@ func (d *Data) insertLog(index int, term int, entries []*Log) int {
 }
 
 type Log struct {
-	term int
-	command interface{}
+	Term int
+	Command interface{}
 }
 
 type Data struct {
@@ -175,10 +175,10 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 type AppendEntriesArgs struct {
 	Term int
 	LeaderId int
-	prevLogIndex int
-	prevLogTerm int
-	entries []*Log
-	leaderCommit int
+	PrevLogIndex int
+	PrevLogTerm int
+	Entries []*Log
+	LeaderCommit int
 }
 
 type AppendEntriesReply struct {
@@ -187,9 +187,7 @@ type AppendEntriesReply struct {
 }
 
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	d := &rf.data
+	d := rf.data
 
 	if args.Term < d.currentTerm {
 		reply.Term = d.currentTerm
@@ -202,11 +200,17 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.Term > d.currentTerm {
 		d.state = FOLLOWER
 		d.currentTerm = args.Term
+		rf.update(d, func() {
+			reply.Term = args.Term
+			reply.Success = false
+		})
 		return
 	}
 
-	reply.Term = d.currentTerm
-	reply.Success = true
+	rf.update(d, func() {
+		reply.Term = d.currentTerm
+		reply.Success = true
+	})
 	return
 }
 
@@ -266,9 +270,7 @@ type RequestVoteReply struct {
 
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	d := &rf.data
+	d := rf.data
 
 	if args.Term < d.currentTerm {
 		reply.Term = d.currentTerm
@@ -280,8 +282,11 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		d.currentTerm = args.Term
 		d.votedFor = args.CandidateId
 		d.heartbeat = 1  // reset election timer if vote granted
-		reply.Term = args.Term
-		reply.VoteGranted = true
+
+		rf.update(d, func() {
+			reply.Term = args.Term
+			reply.VoteGranted = true
+		})
 		//		fmt.Println("vote granted " + d.string() )
 		return
 	}
@@ -395,12 +400,12 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	if !isLeader {
 		return index, term, isLeader
 	}
-	rf.data.log = append(rf.data.log, &Log{term: rf.data.currentTerm, command: command})
+	rf.data.log = append(rf.data.log, &Log{Term: rf.data.currentTerm, Command: command})
 	rf.data.lastApplied = len(rf.data.log) - 1;
 	go rf.startAgreement(rf.data, &AppendEntriesArgs{
 		Term: rf.data.currentTerm,
 		LeaderId: rf.data.me,
-		leaderCommit: rf.data.commitIndex,
+		LeaderCommit: rf.data.commitIndex,
 	})
 
 
@@ -417,7 +422,7 @@ func (rf *Raft) startAgreement(d Data, args *AppendEntriesArgs) {
 		d.votedFor = -1
 		d.state = FOLLOWER
 		d.heartbeat = 1
-		rf.update(d);
+		rf.update(d, func(){});
 		return
 	}
 	rf.mu.Lock()
@@ -451,15 +456,16 @@ func (rf *Raft) ticker() {
 		// Check if a leader election should be started.
 		fmt.Printf("DEBUG tick %s\n", rf.data.string())
 		d, ms := rf.tick(rf.data)
-		rf.update(d)
+		rf.update(d, func(){})
 		time.Sleep(ms)
 	}
 }
 
-func (rf *Raft) update(d Data) {
+func (rf *Raft) update(d Data, callback func()) {
 	rf.mu.Lock()
 	if d.currentTerm >= rf.data.currentTerm {
 		rf.data = d
+		callback()
 	}
 	rf.mu.Unlock()
 }
