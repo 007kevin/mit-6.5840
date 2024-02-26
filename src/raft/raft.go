@@ -324,10 +324,10 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 // that the caller passes the address of the reply struct with &, not
 // the struct itself.
 
-func (rf *Raft) startElection(d Data) (int, bool) {
+func (rf *Raft) startElection(candidate int, term int) (int, bool) {
 	args := &RequestVoteArgs{
-		CandidateId: d.me,
-		Term: d.currentTerm,
+		CandidateId: candidate,
+		Term: term,
 	}
 	ch := make(chan *RequestVoteReply)
 	for i := range(rf.peers) {
@@ -417,7 +417,6 @@ func (rf *Raft) startAgreement(d Data, args *AppendEntriesArgs) {
 		d.votedFor = -1
 		d.state = FOLLOWER
 		d.heartbeat = 1
-		rf.update(d);
 		return
 	}
 	rf.mu.Lock()
@@ -450,44 +449,42 @@ func (rf *Raft) ticker() {
 		// Your code here (2A)
 		// Check if a leader election should be started.
 		fmt.Printf("DEBUG tick %s\n", rf.data.string())
-		d, ms := rf.tick(rf.data)
-		rf.update(d)
+		ms := rf.tick(&rf.data)
 		time.Sleep(ms)
 	}
 }
 
-func (rf *Raft) update(d Data) {
+func (rf *Raft) tick(d *Data) time.Duration {
 	rf.mu.Lock()
-	if d.currentTerm >= rf.data.currentTerm {
-		rf.data = d
-	}
-	rf.mu.Unlock()
-}
+	defer rf.mu.Unlock()
 
-func (rf *Raft) tick(d Data) (Data, time.Duration) {
 	switch d.state {
 	case FOLLOWER:
 		if d.heartbeat == 0 {
-			d.currentTerm++
-			d.votedFor = d.me
 			d.state = CANDIDATE
-			return d, 0
+			return 0
 		} else {
 			d.heartbeat = 0;
-			return d, rsleep()
+			return rsleep()
 		}
 	case CANDIDATE:
-		term, elected := rf.startElection(d)
-		if term > d.currentTerm || !elected {
+		d.currentTerm++
+		d.votedFor = d.me
+		currentTerm := d.currentTerm
+		votedFor := d.votedFor
+		rf.mu.Unlock()
+		term, elected := rf.startElection(votedFor, currentTerm)
+		rf.mu.Lock()
+		if currentTerm != d.currentTerm || term > d.currentTerm || !elected {
 			d.currentTerm = maxInt(term, d.currentTerm + 1)
 			d.votedFor = -1
 			d.state = FOLLOWER
 			d.heartbeat = 1
-			return d, 0
+			return 0
 		}
 		d.state = LEADER
 		d.heartbeat = 1
-		return d, 0
+		return 0
 	case LEADER:
 		term, success := rf.sendEntries(&AppendEntriesArgs{
 			Term: d.currentTerm,
@@ -498,9 +495,9 @@ func (rf *Raft) tick(d Data) (Data, time.Duration) {
 			d.votedFor = -1
 			d.state = FOLLOWER
 			d.heartbeat = 1
-			return d, 0
+			return 0
 		}
-		return d, sleep()
+		return sleep()
 	}
 	panic("did not evaluate: " + d.string())
 }
