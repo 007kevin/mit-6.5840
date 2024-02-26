@@ -70,30 +70,6 @@ type Raft struct {
 	// Your data here (2A, 2B, 2C).
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
-	data Data
-	applyCh chan ApplyMsg
-}
-
-func (d *Data) getLog(index int) *Log {
-	if index < 0 || index >= len(d.log) {
-		return nil
-	}
-	return d.log[index]
-}
-
-func (d *Data) insertLog(index int, term int, entries []*Log) int {
-    // TODO: might need to check conflict, receiver impl #3
-	d.log = append(d.log[0:index], entries...)
-	return len(d.log)
-}
-
-type Log struct {
-	term int
-	command interface{}
-}
-
-type Data struct {
-	me    		int
 	state  		string
 	heartbeat 	int
 	currentTerm int
@@ -103,15 +79,34 @@ type Data struct {
 	commitIndex int
 	nextIndex  	[]int
 	matchIndex 	[]int
+	applyCh chan ApplyMsg
 }
 
-func (d *Data) string() string {
+func (rf *Raft) getLog(index int) *Log {
+	if index < 0 || index >= len(rf.log) {
+		return nil
+	}
+	return rf.log[index]
+}
+
+func (rf *Raft) insertLog(index int, term int, entries []*Log) int {
+    // TODO: might need to check conflict, receiver impl #3
+	rf.log = append(rf.log[0:index], entries...)
+	return len(rf.log)
+}
+
+type Log struct {
+	term int
+	command interface{}
+}
+
+func (rf *Raft) string() string {
 	return fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v}",
-		d.me,
-		d.state,
-		d.heartbeat,
-		d.currentTerm,
-		d.votedFor,
+		rf.me,
+		rf.state,
+		rf.heartbeat,
+		rf.currentTerm,
+		rf.votedFor,
 	)
 }
 
@@ -120,7 +115,7 @@ func (d *Data) string() string {
 func (rf *Raft) GetState() (int, bool) {
 
 	// Your code here (2A).
-	return rf.data.currentTerm, rf.data.state == LEADER
+	return rf.currentTerm, rf.state == LEADER
 }
 
 // save Raft's persistent state to stable storage,
@@ -189,23 +184,22 @@ type AppendEntriesReply struct {
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	d := &rf.data
 
-	if args.Term < d.currentTerm {
-		reply.Term = d.currentTerm
+	if args.Term < rf.currentTerm {
+		reply.Term = rf.currentTerm
 		reply.Success = false
 		return
 	}
 
-	d.heartbeat = 1
+	rf.heartbeat = 1
 
-	if args.Term > d.currentTerm {
-		d.state = FOLLOWER
-		d.currentTerm = args.Term
+	if args.Term > rf.currentTerm {
+		rf.state = FOLLOWER
+		rf.currentTerm = args.Term
 		return
 	}
 
-	reply.Term = d.currentTerm
+	reply.Term = rf.currentTerm
 	reply.Success = true
 	return
 }
@@ -268,31 +262,30 @@ type RequestVoteReply struct {
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	d := &rf.data
 
-	if args.Term < d.currentTerm {
-		reply.Term = d.currentTerm
+	if args.Term < rf.currentTerm {
+		reply.Term = rf.currentTerm
 		reply.VoteGranted = false
 		return
 	}
-	if args.Term > d.currentTerm {
-		d.state = FOLLOWER
-		d.currentTerm = args.Term
-		d.votedFor = args.CandidateId
-		d.heartbeat = 1  // reset election timer if vote granted
+	if args.Term > rf.currentTerm {
+		rf.state = FOLLOWER
+		rf.currentTerm = args.Term
+		rf.votedFor = args.CandidateId
+		rf.heartbeat = 1  // reset election timer if vote granted
 		reply.Term = args.Term
 		reply.VoteGranted = true
-		//		fmt.Println("vote granted " + d.string() )
+		//		fmt.Println("vote granted " + rf.string() )
 		return
 	}
 
-	if d.votedFor == args.CandidateId && d.currentTerm == args.Term {
-		reply.Term = d.currentTerm
+	if rf.votedFor == args.CandidateId && rf.currentTerm == args.Term {
+		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
 		return
 	}
 
-	reply.Term = d.currentTerm
+	reply.Term = rf.currentTerm
 	reply.VoteGranted = false
 }
 
@@ -388,35 +381,35 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	index := rf.data.lastApplied + 1
-	term := rf.data.currentTerm
-	isLeader := rf.data.state == LEADER
+	index := rf.lastApplied + 1
+	term := rf.currentTerm
+	isLeader := rf.state == LEADER
 
 	if !isLeader {
 		return index, term, isLeader
 	}
-	rf.data.log = append(rf.data.log, &Log{term: rf.data.currentTerm, command: command})
-	rf.data.lastApplied = len(rf.data.log) - 1;
-	go rf.startAgreement(rf.data, &AppendEntriesArgs{
-		Term: rf.data.currentTerm,
-		LeaderId: rf.data.me,
-		leaderCommit: rf.data.commitIndex,
+	rf.log = append(rf.log, &Log{term: rf.currentTerm, command: command})
+	rf.lastApplied = len(rf.log) - 1;
+	go rf.startAgreement(&AppendEntriesArgs{
+		Term: rf.currentTerm,
+		LeaderId: rf.me,
+		leaderCommit: rf.commitIndex,
 	})
 
 
 	return index, term, isLeader
 }
 
-func (rf *Raft) startAgreement(d Data, args *AppendEntriesArgs) {
+func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	term, success := rf.sendEntries(&AppendEntriesArgs{
-		Term: d.currentTerm,
-		LeaderId: d.me,
+		Term: rf.currentTerm,
+		LeaderId: rf.me,
 	})
-	if term > d.currentTerm || !success {
-		d.currentTerm = maxInt(term, d.currentTerm + 1)
-		d.votedFor = -1
-		d.state = FOLLOWER
-		d.heartbeat = 1
+	if term > rf.currentTerm || !success {
+		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
+		rf.votedFor = -1
+		rf.state = FOLLOWER
+		rf.heartbeat = 1
 		return
 	}
 	rf.mu.Lock()
@@ -448,58 +441,68 @@ func (rf *Raft) ticker() {
 
 		// Your code here (2A)
 		// Check if a leader election should be started.
-		fmt.Printf("DEBUG tick %s\n", rf.data.string())
-		ms := rf.tick(&rf.data)
+		fmt.Printf("DEBUG tick %s\n", rf.string())
+		ms := rf.tick()
 		time.Sleep(ms)
 	}
 }
 
-func (rf *Raft) tick(d *Data) time.Duration {
+func (rf *Raft) tick() time.Duration {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	switch d.state {
+	switch rf.state {
 	case FOLLOWER:
-		if d.heartbeat == 0 {
-			d.state = CANDIDATE
+		if rf.heartbeat == 0 {
+			rf.state = CANDIDATE
 			return 0
 		} else {
-			d.heartbeat = 0;
+			rf.heartbeat = 0;
 			return rsleep()
 		}
 	case CANDIDATE:
-		d.currentTerm++
-		d.votedFor = d.me
-		currentTerm := d.currentTerm
-		votedFor := d.votedFor
+		rf.currentTerm++
+		rf.votedFor = rf.me
+		currentTerm := rf.currentTerm
+		votedFor := rf.votedFor
 		rf.mu.Unlock()
 		term, elected := rf.startElection(votedFor, currentTerm)
 		rf.mu.Lock()
-		if currentTerm != d.currentTerm || term > d.currentTerm || !elected {
-			d.currentTerm = maxInt(term, d.currentTerm + 1)
-			d.votedFor = -1
-			d.state = FOLLOWER
-			d.heartbeat = 1
+		if (currentTerm != rf.currentTerm) {
 			return 0
 		}
-		d.state = LEADER
-		d.heartbeat = 1
+		if term > rf.currentTerm || !elected {
+			rf.currentTerm = maxInt(term, rf.currentTerm + 1)
+			rf.votedFor = -1
+			rf.state = FOLLOWER
+			rf.heartbeat = 1
+			return 0
+		}
+		rf.state = LEADER
+		rf.heartbeat = 1
 		return 0
 	case LEADER:
+		currentTerm := rf.currentTerm
+		leader := rf.me
+		rf.mu.Unlock()
 		term, success := rf.sendEntries(&AppendEntriesArgs{
-			Term: d.currentTerm,
-			LeaderId: d.me,
+			Term: currentTerm,
+			LeaderId: leader,
 		})
-		if term > d.currentTerm || !success {
-			d.currentTerm = maxInt(term, d.currentTerm + 1)
-			d.votedFor = -1
-			d.state = FOLLOWER
-			d.heartbeat = 1
+		rf.mu.Lock()
+		if (currentTerm != rf.currentTerm) {
+			return 0
+		}
+		if term > rf.currentTerm || !success {
+			rf.currentTerm = maxInt(term, rf.currentTerm + 1)
+			rf.votedFor = -1
+			rf.state = FOLLOWER
+			rf.heartbeat = 1
 			return 0
 		}
 		return sleep()
 	}
-	panic("did not evaluate: " + d.string())
+	panic("did not evaluate: " + rf.string())
 }
 
 func maxInt(a int, b int) int {
@@ -543,17 +546,14 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.me = me
 
 	// Your initialization code here (2A, 2B, 2C).
-	rf.data = Data{
-		me: me,
-		state: FOLLOWER,
-		heartbeat: 1,
-		currentTerm: 0,
-		votedFor: -1,
-		lastApplied: 0,
-		commitIndex: 0,
-		nextIndex: make([]int, len(rf.peers)),
-		matchIndex: make([]int, len(rf.peers)),
-	}
+	rf.state = FOLLOWER
+	rf.heartbeat = 1
+	rf.currentTerm = 0
+	rf.votedFor = -1
+	rf.lastApplied = 0
+	rf.commitIndex = 0
+	rf.nextIndex = make([]int, len(rf.peers))
+	rf.matchIndex = make([]int, len(rf.peers))
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
