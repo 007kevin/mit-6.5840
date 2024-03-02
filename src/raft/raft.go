@@ -35,7 +35,7 @@ const (
 	LEADER = "LEADER"
 )
 
-const RPC_TIMEOUT = 300
+const RPC_TIMEOUT = 500
 
 
 // as each Raft peer becomes aware that successive log entries are
@@ -248,7 +248,7 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
 			continue
 		}
 	}
-	return args.Term, true
+	return args.Term, false
 }
 
 func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
@@ -418,7 +418,10 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	if term != args.Term {
 		return
 	}
-	if term > rf.currentTerm || !success {
+	if (!success) {
+		return
+	}
+	if term > rf.currentTerm {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
 		rf.votedFor = -1
 		rf.state = FOLLOWER
@@ -506,7 +509,7 @@ func (rf *Raft) tick() time.Duration {
 		currentTerm := rf.currentTerm
 		leader := rf.me
 		rf.mu.Unlock()
-		term, success := rf.sendEntries(&AppendEntriesArgs{
+		term, _ := rf.sendEntries(&AppendEntriesArgs{
 			Term: currentTerm,
 			LeaderId: leader,
 		})
@@ -514,7 +517,7 @@ func (rf *Raft) tick() time.Duration {
 		if (currentTerm != rf.currentTerm) {
 			return 0
 		}
-		if term > rf.currentTerm || !success {
+		if term > rf.currentTerm {
 			rf.currentTerm = maxInt(term, rf.currentTerm + 1)
 			rf.votedFor = -1
 			rf.state = FOLLOWER
