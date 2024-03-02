@@ -10,3 +10,9 @@ Questions:
   > the majority of the followers will at least has the operations in their log,
     since the leader would not have commited if it didn't get the majority.
   > servers who do not have commited entries can never become elected.
+
+- lastApplied vs commitIndex
+  clarified here: https://groups.google.com/g/raft-dev/c/KIozjYuq5m0
+
+- overview of algorithm with diagrams
+  https://www.cs.princeton.edu/courses/archive/fall18/cos418/docs/p7-raft.pdf

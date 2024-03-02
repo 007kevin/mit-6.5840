@@ -74,7 +74,7 @@ type Raft struct {
 	heartbeat 	int
 	currentTerm int
 	votedFor  	int
-	log        	[]*Log
+	logs        []*Log
 	lastApplied int
 	commitIndex int
 	nextIndex  	[]int
@@ -83,21 +83,21 @@ type Raft struct {
 }
 
 func (rf *Raft) getLog(index int) *Log {
-	if index < 0 || index >= len(rf.log) {
+	if index < 0 || index >= len(rf.logs) {
 		return nil
 	}
-	return rf.log[index]
+	return rf.logs[index]
 }
 
 func (rf *Raft) insertLog(index int, term int, entries []*Log) int {
     // TODO: might need to check conflict, receiver impl #3
-	rf.log = append(rf.log[0:index], entries...)
-	return len(rf.log)
+	rf.logs = append(rf.logs[0:index], entries...)
+	return len(rf.logs)
 }
 
 type Log struct {
-	term int
-	command interface{}
+	Term int
+	Command interface{}
 }
 
 func (rf *Raft) string() string {
@@ -108,6 +108,16 @@ func (rf *Raft) string() string {
 		rf.currentTerm,
 		rf.votedFor,
 	)
+}
+
+// assumes the caller obtained the lock
+func (rf *Raft) initLeader() {
+	for i := range(rf.nextIndex) {
+		rf.nextIndex[i] = len(rf.logs)
+	}
+	for i := range(rf.matchIndex) {
+		rf.matchIndex[i] = 0
+	}
 }
 
 // return currentTerm and whether this server
@@ -170,10 +180,10 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 type AppendEntriesArgs struct {
 	Term int
 	LeaderId int
-	prevLogIndex int
-	prevLogTerm int
-	entries []*Log
-	leaderCommit int
+	PrevLogIndex int
+	PrevLogTerm int
+	Entries []*Log
+	LeaderCommit int
 }
 
 type AppendEntriesReply struct {
@@ -206,19 +216,21 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
 	ch := make(chan *AppendEntriesReply)
+	rf.mu.Lock()
 	for i := range(rf.peers) {
 		if i == rf.me {
 			continue; // skip itself
 		}
-		go func(i int) {
+		go func(peer int) {
 			var r AppendEntriesReply
-			if rf.sendAppendEntries(i, args, &r){
+			if rf.sendAppendEntries(peer, args, &r){
 				ch <- &r
 			} else {
 				ch <- &AppendEntriesReply{Success: false, Term: -1}
 			}
 		}(i)
 	}
+	rf.mu.Unlock()
 	success := 1
 	for i := 0; i < len(rf.peers) - 1; i++ {
 		select {
@@ -381,30 +393,31 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	index := rf.lastApplied + 1
+	index := rf.commitIndex + 1
 	term := rf.currentTerm
 	isLeader := rf.state == LEADER
 
 	if !isLeader {
 		return index, term, isLeader
 	}
-	rf.log = append(rf.log, &Log{term: rf.currentTerm, command: command})
-	rf.lastApplied = len(rf.log) - 1;
+	rf.logs = append(rf.logs, &Log{Term: rf.currentTerm, Command: command})
 	go rf.startAgreement(&AppendEntriesArgs{
 		Term: rf.currentTerm,
 		LeaderId: rf.me,
-		leaderCommit: rf.commitIndex,
+		LeaderCommit: rf.commitIndex,
 	})
-
 
 	return index, term, isLeader
 }
 
 func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
-	term, success := rf.sendEntries(&AppendEntriesArgs{
-		Term: rf.currentTerm,
-		LeaderId: rf.me,
-	})
+	term, success := rf.sendEntries(args)
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	if term != args.Term {
+		return
+	}
 	if term > rf.currentTerm || !success {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
 		rf.votedFor = -1
@@ -412,8 +425,15 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 		rf.heartbeat = 1
 		return
 	}
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
+	rf.commitIndex = maxInt(rf.commitIndex, args.LeaderCommit + 1)
+	for ; rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
+		rf.applyCh <- ApplyMsg{
+			CommandValid: false,
+			Command: rf.logs[rf.lastApplied+1],
+			CommandIndex: rf.lastApplied+1,
+		}
+	}
+
 	//	rf.commitIndex = maxInt(rf.commitIndex, )
 }
 
@@ -480,6 +500,7 @@ func (rf *Raft) tick() time.Duration {
 		}
 		rf.state = LEADER
 		rf.heartbeat = 1
+		rf.initLeader()
 		return 0
 	case LEADER:
 		currentTerm := rf.currentTerm
@@ -550,7 +571,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.heartbeat = 1
 	rf.currentTerm = 0
 	rf.votedFor = -1
-	rf.lastApplied = 0
+	rf.lastApplied = -1
 	rf.commitIndex = 0
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
