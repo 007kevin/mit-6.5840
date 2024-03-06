@@ -214,7 +214,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	return
 }
 
-func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
+func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
 	ch := make(chan *AppendEntriesReply)
 	rf.mu.Lock()
 	for i := range(rf.peers) {
@@ -231,24 +231,17 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) (int, bool){
 		}(i)
 	}
 	rf.mu.Unlock()
-	success := 1
 	for i := 0; i < len(rf.peers) - 1; i++ {
 		select {
 		case r := <-ch:
 			if (r.Term > args.Term) {
-				return r.Term, false
-			}
-			if r.Success {
-				success++
-			}
-			if success > len(rf.peers)/2 {
-				return args.Term, true
+				return r.Term
 			}
 		case <-time.After(RPC_TIMEOUT * time.Millisecond):
 			continue
 		}
 	}
-	return args.Term, false
+	return args.Term
 }
 
 func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
@@ -393,34 +386,33 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	index := rf.commitIndex + 1
+	index := len(rf.logs)
 	term := rf.currentTerm
 	isLeader := rf.state == LEADER
 
-	if !isLeader {
-		return index, term, isLeader
+	if isLeader {
+		rf.logs = append(rf.logs, &Log{Term: rf.currentTerm, Command: command})
+		rf.nextIndex[rf.me] = index + 1
+		rf.matchIndex[rf.me] = index
+		go rf.startAgreement(&AppendEntriesArgs{
+			Term: rf.currentTerm,
+			LeaderId: rf.me,
+			LeaderCommit: rf.commitIndex,
+		})
 	}
-	rf.logs = append(rf.logs, &Log{Term: rf.currentTerm, Command: command})
-	go rf.startAgreement(&AppendEntriesArgs{
-		Term: rf.currentTerm,
-		LeaderId: rf.me,
-		LeaderCommit: rf.commitIndex,
-	})
 
 	return index, term, isLeader
 }
 
 func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
-	term, success := rf.sendEntries(args)
+	term := rf.sendEntries(args)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
 	if term != args.Term {
 		return
 	}
-	if (!success) {
-		return
-	}
+
 	if term > rf.currentTerm {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
 		rf.votedFor = -1
@@ -509,7 +501,7 @@ func (rf *Raft) tick() time.Duration {
 		currentTerm := rf.currentTerm
 		leader := rf.me
 		rf.mu.Unlock()
-		term, _ := rf.sendEntries(&AppendEntriesArgs{
+		term := rf.sendEntries(&AppendEntriesArgs{
 			Term: currentTerm,
 			LeaderId: leader,
 		})
