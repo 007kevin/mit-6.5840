@@ -324,8 +324,8 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 type RequestVoteArgs struct {
 	Term int
 	CandidateId int
-	lastLogIndex int
-	lastLogTerm int
+	lastIndex int
+	lastTerm int
 }
 
 // example RequestVote RPC reply structure.
@@ -345,7 +345,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.VoteGranted = false
 		return
 	}
-	if args.Term > rf.currentTerm {
+	if args.Term > rf.currentTerm &&
+		rf.upToDate(args.lastIndex, args.lastTerm) {
 		rf.state = FOLLOWER
 		rf.currentTerm = args.Term
 		rf.votedFor = args.CandidateId
@@ -356,7 +357,9 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	if rf.votedFor == args.CandidateId && rf.currentTerm == args.Term {
+	if rf.votedFor == args.CandidateId &&
+		rf.currentTerm == args.Term &&
+		rf.upToDate(args.lastIndex, args.lastTerm) {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
 		return
@@ -364,6 +367,25 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	reply.Term = rf.currentTerm
 	reply.VoteGranted = false
+}
+
+func (rf *Raft) upToDate(lastIndex int, lastTerm int) bool {
+	myLastIndex := len(rf.logs) - 1
+	myLastTerm := -1
+	if (myLastIndex >= 0){
+		myLastTerm = rf.logs[myLastIndex].Term
+	}
+	if (lastTerm > myLastTerm) {
+		return true
+	}
+	if (lastTerm < myLastTerm) {
+		return false
+	}
+	if (lastIndex >= myLastIndex) {
+		return true
+	} else {
+		return false
+	}
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -402,8 +424,8 @@ func (rf *Raft) startElection(
 	args := &RequestVoteArgs{
 		CandidateId: candidate,
 		Term: term,
-		lastLogIndex: lastIndex,
-		lastLogTerm: lastTerm,
+		lastIndex: lastIndex,
+		lastTerm: lastTerm,
 	}
 	ch := make(chan *RequestVoteReply)
 	for i := range(rf.peers) {
