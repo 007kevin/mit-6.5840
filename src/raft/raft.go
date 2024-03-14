@@ -101,12 +101,15 @@ type Log struct {
 }
 
 func (rf *Raft) string() string {
-	return fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v}",
+	return fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
 		rf.me,
 		rf.state,
 		rf.heartbeat,
 		rf.currentTerm,
 		rf.votedFor,
+		rf.commitIndex,
+		rf.lastApplied,
+		len(rf.logs),
 	)
 }
 
@@ -212,7 +215,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	if args.Term < rf.currentTerm {
+	if args.Term < rf.currentTerm || !rf.prevMatches(args.PrevLogIndex, args.PrevLogTerm) {
 		reply.Term = rf.currentTerm
 		reply.Success = false
 		return
@@ -225,9 +228,40 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		rf.currentTerm = args.Term
 	}
 
+	rf.logs = append(rf.logs[0:maxInt(0, args.PrevLogIndex)], args.Entries...)
+
+	// apply everything up to commit
+	if args.LeaderCommit > rf.commitIndex {
+		rf.commitIndex = minInt(args.LeaderCommit, maxInt(0, len(rf.logs) - 1))
+	}
+	if (rf.commitIndex > 0) {
+		for ;rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
+			rf.applyCh <- ApplyMsg{
+				CommandValid: false,
+				Command: rf.logs[rf.lastApplied+1],
+				CommandIndex: rf.lastApplied+1,
+			}
+		}
+	}
+
 	reply.Term = rf.currentTerm
 	reply.Success = true
 	return
+}
+
+// assumes caller obtained the lock
+func (rf *Raft) prevMatches(prevIndex int, prevTerm int) bool {
+	if prevIndex < 0 {
+		return true
+	}
+	if len(rf.logs) <= prevIndex {
+		return false
+	}
+	log := rf.logs[prevIndex]
+	if log.Term != prevTerm {
+		return false
+	}
+	return true
 }
 
 func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
@@ -324,8 +358,8 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 type RequestVoteArgs struct {
 	Term int
 	CandidateId int
-	lastIndex int
-	lastTerm int
+	LastIndex int
+	LastTerm int
 }
 
 // example RequestVote RPC reply structure.
@@ -346,7 +380,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 	if args.Term > rf.currentTerm &&
-		rf.upToDate(args.lastIndex, args.lastTerm) {
+		rf.upToDate(args.LastIndex, args.LastTerm) {
 		rf.state = FOLLOWER
 		rf.currentTerm = args.Term
 		rf.votedFor = args.CandidateId
@@ -359,7 +393,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	if rf.votedFor == args.CandidateId &&
 		rf.currentTerm == args.Term &&
-		rf.upToDate(args.lastIndex, args.lastTerm) {
+		rf.upToDate(args.LastIndex, args.LastTerm) {
 		reply.Term = rf.currentTerm
 		reply.VoteGranted = true
 		return
@@ -424,8 +458,8 @@ func (rf *Raft) startElection(
 	args := &RequestVoteArgs{
 		CandidateId: candidate,
 		Term: term,
-		lastIndex: lastIndex,
-		lastTerm: lastTerm,
+		LastIndex: lastIndex,
+		LastTerm: lastTerm,
 	}
 	ch := make(chan *RequestVoteReply)
 	for i := range(rf.peers) {
