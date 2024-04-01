@@ -1,323 +1,320 @@
-DEBUG tick {me: 0, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: -1, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: -1, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: -1, e: 0}
+DEBUG tick {me: 0, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
 Test (2B): basic agreement ...
-DEBUG tick {me: 0, st: FOLLOWER, hb: 0, ct: 0, vf: -1, c: 0, a: -1, e: 0}
-DEBUG tick {me: 0, st: CANDIDATE, hb: 0, ct: 1, vf: 0, c: 0, a: -1, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 0, ct: 0, vf: -1, c: 0, a: -1, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: -1, e: 0}
-  {p: 0, n: 0, m: 0}
-  {p: 1, n: 0, m: 0}
-  {p: 2, n: 0, m: 0}
-DEBUG star {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
+DEBUG tick {me: 0, st: FOLLOWER, hb: 0, ct: 0, vf: -1, c: 0, a: 0, e: 1}
+DEBUG tick {me: 0, st: CANDIDATE, hb: 0, ct: 1, vf: 0, c: 0, a: 0, e: 1}
+DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: -1, e: 1}
+DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: -1, e: 1}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 0, ct: 1, vf: 0, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: CANDIDATE, hb: 0, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
+DEBUG star {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 2}
+  {p: 0, n: 2, m: 1}
+  {p: 1, n: 2, m: 1}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
+DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
+DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 1, a: 0, e: 2}
+  {p: 0, n: 2, m: 1}
+  {p: 1, n: 2, m: 1}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: FOLLOWER, hb: 0, ct: 1, vf: 0, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: CANDIDATE, hb: 0, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
-DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
+DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
+DEBUG tick {me: 2, st: LEADER, hb: 1, ct: 2, vf: 2, c: 0, a: 0, e: 1}
   {p: 0, n: 1, m: 0}
   {p: 1, n: 1, m: 0}
   {p: 2, n: 1, m: 0}
@@ -325,4 +322,4 @@ DEBUG tick {me: 1, st: LEADER, hb: 1, ct: 2, vf: 1, c: 0, a: -1, e: 1}
     config.go:594: one(100) failed to reach agreement
 FAIL
 exit status 1
-FAIL	6.5840/raft	2.650s
+FAIL	6.5840/raft	2.500s

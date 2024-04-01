@@ -257,7 +257,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 // assumes caller obtained the lock
 func (rf *Raft) prevMatches(prevIndex int, prevTerm int) bool {
-	if prevIndex < 0 {
+	if prevIndex < 1 {
 		return true
 	}
 	if len(rf.logs) <= prevIndex {
@@ -285,7 +285,7 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
 				entries := []*Log{}
 				prevLogIndex := nextIndex - 1
 				prevLogTerm := -1
-				if prevLogIndex >= 0 {
+				if prevLogIndex >= 1 {
 					prevLogIndex = rf.logs[prevLogIndex].Term
 				}
 				if lastIndex >= nextIndex {
@@ -412,7 +412,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 func (rf *Raft) upToDate(lastIndex int, lastTerm int) bool {
 	myLastIndex := len(rf.logs) - 1
 	myLastTerm := -1
-	if (myLastIndex >= 0){
+	if (myLastIndex >= 1){
 		myLastTerm = rf.logs[myLastIndex].Term
 	}
 	if (lastTerm > myLastTerm) {
@@ -549,7 +549,7 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	fmt.Printf("DEBUG star %s\n", rf.string())
+	fmt.Printf("DEBUG A %s\n", rf.string())
 
 	if term > rf.currentTerm {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
@@ -560,6 +560,7 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	}
 
 	// determine commitIndex from the matchIndex majority
+	fmt.Printf("DEBUG M(%v) %s\n", 	rf.matchIndexMajority(), rf.string())
 	rf.commitIndex = maxInt(rf.commitIndex, rf.matchIndexMajority())
 	for ;rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
 		rf.applyCh <- ApplyMsg{
@@ -568,6 +569,7 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 			CommandIndex: rf.lastApplied+1,
 		}
 	}
+	fmt.Printf("DEBUG B %s\n", rf.string())
 }
 
 // the tester doesn't halt goroutines created by Raft after each test,
@@ -620,7 +622,7 @@ func (rf *Raft) tick() time.Duration {
 		votedFor := rf.votedFor
 		lastIndex := len(rf.logs) - 1
 		lastTerm := -1
-		if (lastIndex >= 0) {
+		if (lastIndex >= 1) {
 			lastTerm = rf.logs[lastIndex].Term
 		}
 		rf.mu.Unlock()
@@ -709,13 +711,15 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.peers = peers
 	rf.persister = persister
 	rf.me = me
+	rf.applyCh = applyCh
 
 	// Your initialization code here (2A, 2B, 2C).
 	rf.state = FOLLOWER
 	rf.heartbeat = 1
 	rf.currentTerm = 0
 	rf.votedFor = -1
-	rf.lastApplied = -1
+	rf.lastApplied = 0
+	rf.logs = make([]*Log, 1) // first log index is 1
 	rf.commitIndex = 0
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
