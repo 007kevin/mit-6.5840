@@ -101,7 +101,7 @@ type Log struct {
 }
 
 func (rf *Raft) string() string {
-	return fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
+	info := fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
 		rf.me,
 		rf.state,
 		rf.heartbeat,
@@ -111,6 +111,12 @@ func (rf *Raft) string() string {
 		rf.lastApplied,
 		len(rf.logs),
 	)
+	if rf.state == LEADER {
+			for i := range(rf.nextIndex) {
+			info = info + fmt.Sprintf("\n  {p: %v, n: %v, m: %v}", i, rf.nextIndex[i], rf.matchIndex[i])
+		}
+	}
+	return info
 }
 
 // assumes the caller obtained the lock
@@ -542,6 +548,8 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	term := rf.sendEntries(args)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+
+	fmt.Printf("DEBUG star %s\n", rf.string())
 
 	if term > rf.currentTerm {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
