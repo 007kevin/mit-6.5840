@@ -103,7 +103,7 @@ type Log struct {
 func (rf *Raft) string() string {
 	info := fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
 		rf.me,
-		rf.state,
+		rf.state[0:6],
 		rf.heartbeat,
 		rf.currentTerm,
 		rf.votedFor,
@@ -111,11 +111,18 @@ func (rf *Raft) string() string {
 		rf.lastApplied,
 		len(rf.logs),
 	)
-	if rf.state == LEADER {
-			for i := range(rf.nextIndex) {
-			info = info + fmt.Sprintf("\n  {p: %v, n: %v, m: %v}", i, rf.nextIndex[i], rf.matchIndex[i])
+	for i, v := range(rf.logs) {
+		if i == 0 {
+			info = info + " *"
+		} else {
+			info = info + fmt.Sprintf(" |%v,%v,%v|", i, v.Term, v.Command)
 		}
 	}
+	// if rf.state == LEADER {
+	// 		for i := range(rf.nextIndex) {
+	// 		info = info + fmt.Sprintf("\n  {p: %v, n: %v, m: %v}", i, rf.nextIndex[i], rf.matchIndex[i])
+	// 	}
+	// }
 	return info
 }
 
@@ -212,6 +219,17 @@ type AppendEntriesArgs struct {
 	LeaderCommit int
 }
 
+func (args *AppendEntriesArgs) string() string {
+	return fmt.Sprintf("{t: %v, lid: %v, pi: %v, pt: %v, e: %v, lc: %v}",
+		args.Term,
+		args.LeaderId,
+		args.PrevLogIndex,
+		args.PrevLogTerm,
+		len(args.Entries),
+		args.LeaderCommit,
+	)
+}
+
 type AppendEntriesReply struct {
 	Term int
 	Success bool
@@ -234,17 +252,19 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		rf.currentTerm = args.Term
 	}
 
-	rf.logs = append(rf.logs[0:maxInt(0, args.PrevLogIndex)], args.Entries...)
+	//	fmt.Printf("DEBUG args %s\n", args.string())
+	//	fmt.Printf("DEBUG append BEFORE %s\n", rf.string())
+	rf.logs = append(rf.logs[0:maxInt(1, args.PrevLogIndex)], args.Entries...)
 
 	// apply everything up to commit
 	if args.LeaderCommit > rf.commitIndex {
-		rf.commitIndex = minInt(args.LeaderCommit, maxInt(0, len(rf.logs) - 1))
+		rf.commitIndex = minInt(args.LeaderCommit, maxInt(1, len(rf.logs) - 1))
 	}
 	if (rf.commitIndex > 0) {
 		for ;rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
 			rf.applyCh <- ApplyMsg{
-				CommandValid: false,
-				Command: rf.logs[rf.lastApplied+1],
+				CommandValid: true,
+				Command: rf.logs[rf.lastApplied+1].Command,
 				CommandIndex: rf.lastApplied+1,
 			}
 		}
@@ -252,6 +272,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	reply.Term = rf.currentTerm
 	reply.Success = true
+	//	fmt.Printf("DEBUG append AFTER  %s\n", rf.string())
 	return
 }
 
@@ -534,6 +555,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		rf.logs = append(rf.logs, &Log{Term: rf.currentTerm, Command: command})
 		rf.nextIndex[rf.me] = index + 1
 		rf.matchIndex[rf.me] = index
+		fmt.Printf("DEBUG start %s\n", rf.string())
 		go rf.startAgreement(&AppendEntriesArgs{
 			Term: rf.currentTerm,
 			LeaderId: rf.me,
@@ -549,8 +571,6 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	fmt.Printf("DEBUG A %s\n", rf.string())
-
 	if term > rf.currentTerm {
 		rf.currentTerm = maxInt(term, rf.currentTerm + 1)
 		rf.votedFor = -1
@@ -560,16 +580,14 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 	}
 
 	// determine commitIndex from the matchIndex majority
-	fmt.Printf("DEBUG M(%v) %s\n", 	rf.matchIndexMajority(), rf.string())
 	rf.commitIndex = maxInt(rf.commitIndex, rf.matchIndexMajority())
 	for ;rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
 		rf.applyCh <- ApplyMsg{
-			CommandValid: false,
-			Command: rf.logs[rf.lastApplied+1],
+			CommandValid: true,
+			Command: rf.logs[rf.lastApplied+1].Command,
 			CommandIndex: rf.lastApplied+1,
 		}
 	}
-	fmt.Printf("DEBUG B %s\n", rf.string())
 }
 
 // the tester doesn't halt goroutines created by Raft after each test,
