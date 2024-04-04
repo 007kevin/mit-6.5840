@@ -252,13 +252,11 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		rf.currentTerm = args.Term
 	}
 
-	//	fmt.Printf("DEBUG args %s\n", args.string())
-	//	fmt.Printf("DEBUG append BEFORE %s\n", rf.string())
-	rf.logs = append(rf.logs[0:maxInt(1, args.PrevLogIndex)], args.Entries...)
+	rf.logs = append(rf.logs[0:maxInt(1, args.PrevLogIndex+1)], args.Entries...)
 
 	// apply everything up to commit
 	if args.LeaderCommit > rf.commitIndex {
-		rf.commitIndex = minInt(args.LeaderCommit, maxInt(1, len(rf.logs) - 1))
+		rf.commitIndex = minInt(args.LeaderCommit, maxInt(0, len(rf.logs) - 1))
 	}
 	if (rf.commitIndex > 0) {
 		for ;rf.lastApplied < rf.commitIndex; rf.lastApplied++ {
@@ -272,7 +270,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	reply.Term = rf.currentTerm
 	reply.Success = true
-	//	fmt.Printf("DEBUG append AFTER  %s\n", rf.string())
 	return
 }
 
@@ -307,7 +304,7 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
 				prevLogIndex := nextIndex - 1
 				prevLogTerm := -1
 				if prevLogIndex >= 1 {
-					prevLogIndex = rf.logs[prevLogIndex].Term
+					prevLogTerm = rf.logs[prevLogIndex].Term
 				}
 				if lastIndex >= nextIndex {
 					entries = append(entries, rf.logs[nextIndex])
