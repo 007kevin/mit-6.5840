@@ -82,19 +82,6 @@ type Raft struct {
 	applyCh chan ApplyMsg
 }
 
-func (rf *Raft) getLog(index int) *Log {
-	if index < 0 || index >= len(rf.logs) {
-		return nil
-	}
-	return rf.logs[index]
-}
-
-func (rf *Raft) insertLog(index int, term int, entries []*Log) int {
-    // TODO: might need to check conflict, receiver impl #3
-	rf.logs = append(rf.logs[0:index], entries...)
-	return len(rf.logs)
-}
-
 type Log struct {
 	Term int
 	Command interface{}
@@ -115,7 +102,7 @@ func (rf *Raft) string() string {
 		if i == 0 {
 			info = info + " *"
 		} else {
-			info = info + fmt.Sprintf(" |%v,%v,%v|", i, v.Term, v.Command)
+			info = info + fmt.Sprintf(" |%v,%v,%.3v|", i, v.Term, v.Command)
 		}
 	}
 	// if rf.state == LEADER {
@@ -150,7 +137,10 @@ func (rf *Raft) matchIndexMajority() int {
 			term = t
 		}
 	}
-	return term
+	if freq > len(rf.peers)/2 {
+		return term
+	}
+	return -1
 }
 
 // return currentTerm and whether this server
@@ -307,7 +297,7 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
 					prevLogTerm = rf.logs[prevLogIndex].Term
 				}
 				if lastIndex >= nextIndex {
-					entries = append(entries, rf.logs[nextIndex])
+					entries = append(entries, rf.logs[nextIndex:lastIndex+1]...)
 				}
 				var r AppendEntriesReply
 				if rf.sendAppendEntries(peer, &AppendEntriesArgs{
@@ -325,7 +315,7 @@ func (rf *Raft) sendEntries(args *AppendEntriesArgs) int {
 
 					if r.Success {
 						if lastIndex >= nextIndex {
-							nextIndex++
+							nextIndex = lastIndex + 1
 						}
 						if (lastIndex < nextIndex) {
 							rf.mu.Lock()
@@ -702,7 +692,7 @@ func minInt(a int, b int) int {
 }
 
 func sleep() time.Duration {
-	ms := 25
+	ms := 49
 	return time.Duration(ms) * time.Millisecond
 }
 
