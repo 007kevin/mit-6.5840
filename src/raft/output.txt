@@ -1,404 +1,440 @@
-DEBUG tick {me: 0, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 0, vf: -1, c: 0, a: 0, e: 1}
-Test (2A): initial election ...
-DEBUG tick {me: 0, st: FOLLOWER, hb: 0, ct: 0, vf: -1, c: 0, a: 0, e: 1}
-DEBUG tick {me: 0, st: CANDIDATE, hb: 0, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 0, st: LEADER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 1}
-  {p: 0, n: 1, m: 0}
-  {p: 1, n: 1, m: 0}
-  {p: 2, n: 1, m: 0}
-DEBUG append BEFORE {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 2, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append BEFORE {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG append AFTER  {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-DEBUG tick {me: 1, st: FOLLOWER, hb: 1, ct: 1, vf: 0, c: 0, a: 0, e: 0}
-signal: interrupt
-FAIL	6.5840/raft	1.586s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   18    4444    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   50  112968   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  144   32410    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  149   34085    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   5.1  3  239   55725    8
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  140   30698    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   28    6976    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.7  3  297   70436    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  15.7  5 1197  557994  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.2  3  110   27704   12
+PASS
+ok  	6.5840/raft	42.972s
+Test (2B): basic agreement ...
+  ... Passed --   0.5  3   16    3912    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   50  112868   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  143   32379    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  152   34756    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.2  3  181   44107    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  144   32024    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   28    6568    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.8  3  223   53302    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.3  5 1147  572036  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.2  3  114   28696   12
+PASS
+ok  	6.5840/raft	38.246s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   16    3912    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112372   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.5  3  146   32916    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  150   34137    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.3  3  183   44710    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  179   41440    4
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.7  3  189   43320    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  11.5  5 1128  545680  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  114   28924   12
+PASS
+ok  	6.5840/raft	35.270s
+Test (2B): basic agreement ...
+  ... Passed --   0.5  3   22    5016    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.5  3  151   33975    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.7  3  151   34486    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   4.1  3  211   50057    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  149   33916    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   24    5928    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.5  3  186   42344    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  14.8  5 1165  551602  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.2  3  120   30424   12
+PASS
+ok  	6.5840/raft	39.404s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3912    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  144   32384    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  147   33604    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.2  3  187   45613    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  154   35138    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.7  3  229   54454    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  16.3  5 1190  567034  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  112   28200   12
+PASS
+ok  	6.5840/raft	41.532s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3912    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  142   32228    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.4  3  148   33507    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  191   46255    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.8  5  172   37662    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.5  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.7  3  297   70689    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.7  5 1153  554820  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  118   29924   12
+PASS
+ok  	6.5840/raft	38.800s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  142   32202    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  153   35037    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  191   46731    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.2  5  157   34218    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   26    6476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.8  3  141   32119    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  13.0  5 1220  603212  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  108   27422   12
+PASS
+ok  	6.5840/raft	36.574s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   16    3912    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  151   33769    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.4  3  154   35073    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.7  3  209   51158    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.4  5  165   36354    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.5  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.7  3  303   72162    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  15.4  5 1211  600702  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  112   28200   12
+PASS
+ok  	6.5840/raft	41.150s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   18    4408    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   48  112372   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  138   31212    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.7  3  147   33602    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.3  3  185   45702    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.7  5  149   30256    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.5  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.6  3  295   69979    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.6  5 1205  593035  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  104   26424   12
+PASS
+ok  	6.5840/raft	38.410s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  143   31786    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  146   33277    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  189   46097    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.7  5  170   37576    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   34    8476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.8  3  188   42959    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  13.3  5 1464  694958  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  104   26424   12
+PASS
+ok  	6.5840/raft	37.252s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  136   30759    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  154   35094    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  191   46931    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  169   38996    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   30    7476    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.8  3  192   43801    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  15.4  5 1182  554456  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  100   25424   12
+PASS
+ok  	6.5840/raft	38.921s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   18    4444    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   48  112372   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  145   32918    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  153   34774    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   5.2  3  249   58008    8
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.2  5  136   30004    4
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   30    7416    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.8  3  189   43270    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  15.3  5 1369  645403  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  118   29924   12
+PASS
+ok  	6.5840/raft	40.733s
+Test (2B): basic agreement ...
+  ... Passed --   0.4  3   18    4408    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   50  112868   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  140   31724    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  149   33971    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.2  3  185   44791    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  137   30118    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   28    6920    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.6  3  198   45093    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.7  5 1153  569592  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  118   29924   12
+PASS
+ok  	6.5840/raft	36.125s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   50  112968   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.2  3  136   30433    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  148   33726    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.4  3  185   45153    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.2  5  128   27002    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   30    7416    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.6  3  190   43381    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.5  5 1145  550392  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.0  3  112   28424   12
+PASS
+ok  	6.5840/raft	35.756s
+Test (2B): basic agreement ...
+  ... Passed --   0.5  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   50  112968   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.5  3  147   33383    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  156   35530    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  195   47244    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.2  5  171   38794    4
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   28    6976    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.5  3  304   71777    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  14.8  5 1178  560638  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  106   26712   12
+PASS
+ok  	6.5840/raft	40.561s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   50  112868   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  143   32371    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.7  3  156   35481    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   4.8  3  231   53572    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  128   27012    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   32    7928    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.7  3  299   71204    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.9  5 1155  559542  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  116   29424   12
+PASS
+ok  	6.5840/raft	39.892s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   18    4444    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   50  112868   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  144   32102    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.6  3  154   35010    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.2  3  185   45145    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  156   35742    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   34    8408    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.9  3  198   45099    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.7  5 1145  548602  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  114   28696   12
+PASS
+ok  	6.5840/raft	36.399s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   16    3944    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   50  112968   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.3  3  142   31884    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  149   34124    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.3  3  187   45785    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  146   31488    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   32    7976    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --  10.1  3  155   30777    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  13.4  5 1359  623076  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  102   25720   12
+PASS
+ok  	6.5840/raft	43.124s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   18    4444    3
+Test (2B): RPC byte count ...
+  ... Passed --   1.0  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  144   32170    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.7  3  151   34469    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.4  3  191   46506    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  159   35714    4
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.5  3   28    6976    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   3.5  3  115   25743    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  19.2  5 1263  639496  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  118   29704   12
+PASS
+ok  	6.5840/raft	42.805s
+Test (2B): basic agreement ...
+  ... Passed --   0.3  3   18    4408    3
+Test (2B): RPC byte count ...
+  ... Passed --   0.9  3   48  112468   11
+Test (2B): test progressive failure of followers ...
+  ... Passed --   4.4  3  142   31902    3
+Test (2B): test failure of leaders ...
+  ... Passed --   4.5  3  152   34759    3
+Test (2B): agreement after follower reconnects ...
+  ... Passed --   3.5  3  191   46662    7
+Test (2B): no agreement if too many followers disconnect ...
+  ... Passed --   3.3  5  160   35124    3
+Test (2B): concurrent Start()s ...
+  ... Passed --   0.6  3   32    7976    6
+Test (2B): rejoin of partitioned leader ...
+  ... Passed --   5.6  3  307   72607    4
+Test (2B): leader backs up quickly over incorrect follower logs ...
+  ... Passed --  12.8  5 1154  567596  102
+Test (2B): RPC counts aren't too high ...
+  ... Passed --   2.1  3  106   26712   12
+PASS
+ok  	6.5840/raft	38.431s

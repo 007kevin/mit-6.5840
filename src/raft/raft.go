@@ -37,6 +37,44 @@ const (
 
 const RPC_TIMEOUT = 500
 
+type debug struct {
+	tag string
+	showlogs bool
+	showleader bool
+}
+
+func (d debug) emit(rf *Raft) {
+	return
+	info := fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
+		rf.me,
+		rf.state[0:6],
+		rf.heartbeat,
+		rf.currentTerm,
+		rf.votedFor,
+		rf.commitIndex,
+		rf.lastApplied,
+		len(rf.logs),
+	)
+	if d.showlogs {
+		for i, v := range(rf.logs) {
+			if i == 0 {
+				info = info + " *"
+			} else {
+				info = info + fmt.Sprintf(" |%v,%v,%.3v|", i, v.Term, v.Command)
+			}
+		}
+	}
+	if d.showleader {
+		if rf.state == LEADER {
+			info = info + "\n        "
+			for i := range(rf.nextIndex) {
+				info = info + fmt.Sprintf("(p: %v, n: %v, m: %v) ", i, rf.nextIndex[i], rf.matchIndex[i])
+			}
+		}
+	}
+	fmt.Printf("D: %s %s\n", d.tag, info)
+}
+
 
 // as each Raft peer becomes aware that successive log entries are
 // committed, the peer should send an ApplyMsg to the service (or
@@ -85,32 +123,6 @@ type Raft struct {
 type Log struct {
 	Term int
 	Command interface{}
-}
-
-func (rf *Raft) string() string {
-	info := fmt.Sprintf("{me: %v, st: %v, hb: %v, ct: %v, vf: %v, c: %v, a: %v, e: %v}",
-		rf.me,
-		rf.state[0:6],
-		rf.heartbeat,
-		rf.currentTerm,
-		rf.votedFor,
-		rf.commitIndex,
-		rf.lastApplied,
-		len(rf.logs),
-	)
-	for i, v := range(rf.logs) {
-		if i == 0 {
-			info = info + " *"
-		} else {
-			info = info + fmt.Sprintf(" |%v,%v,%.3v|", i, v.Term, v.Command)
-		}
-	}
-	// if rf.state == LEADER {
-	// 		for i := range(rf.nextIndex) {
-	// 		info = info + fmt.Sprintf("\n  {p: %v, n: %v, m: %v}", i, rf.nextIndex[i], rf.matchIndex[i])
-	// 	}
-	// }
-	return info
 }
 
 // assumes the caller obtained the lock
@@ -401,7 +413,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.heartbeat = 1  // reset election timer if vote granted
 		reply.Term = args.Term
 		reply.VoteGranted = true
-		//		fmt.Println("vote granted " + rf.string() )
 		return
 	}
 
@@ -542,18 +553,12 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		rf.logs = append(rf.logs, &Log{Term: rf.currentTerm, Command: command})
 		rf.nextIndex[rf.me] = index + 1
 		rf.matchIndex[rf.me] = index
-		fmt.Printf("DEBUG start %s\n", rf.string())
-		go rf.startAgreement(&AppendEntriesArgs{
-			Term: rf.currentTerm,
-			LeaderId: rf.me,
-			LeaderCommit: rf.commitIndex,
-		})
+		// let the next leader tick propagate new log entries
 	}
-
 	return index, term, isLeader
 }
 
-func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
+func (rf *Raft) startAgreement(args *AppendEntriesArgs) int {
 	term := rf.sendEntries(args)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
@@ -563,7 +568,7 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 		rf.votedFor = -1
 		rf.state = FOLLOWER
 		rf.heartbeat = 1
-		return
+		return term
 	}
 
 	// determine commitIndex from the matchIndex majority
@@ -575,6 +580,7 @@ func (rf *Raft) startAgreement(args *AppendEntriesArgs) {
 			CommandIndex: rf.lastApplied+1,
 		}
 	}
+	return term
 }
 
 // the tester doesn't halt goroutines created by Raft after each test,
@@ -601,7 +607,7 @@ func (rf *Raft) ticker() {
 
 		// Your code here (2A)
 		// Check if a leader election should be started.
-		fmt.Printf("DEBUG tick %s\n", rf.string())
+		debug{tag: "tick", showleader: true}.emit(rf)
 		ms := rf.tick()
 		time.Sleep(ms)
 	}
@@ -656,7 +662,7 @@ func (rf *Raft) tick() time.Duration {
 		leaderCommit := rf.commitIndex
 		leader := rf.me
 		rf.mu.Unlock()
-		term := rf.sendEntries(&AppendEntriesArgs{
+		term := rf.startAgreement(&AppendEntriesArgs{
 			Term: currentTerm,
 			LeaderId: leader,
 			LeaderCommit: leaderCommit,
@@ -674,7 +680,7 @@ func (rf *Raft) tick() time.Duration {
 		}
 		return sleep()
 	}
-	panic("did not evaluate: " + rf.string())
+	panic("did not evaluate")
 }
 
 func maxInt(a int, b int) int {
@@ -692,7 +698,7 @@ func minInt(a int, b int) int {
 }
 
 func sleep() time.Duration {
-	ms := 49
+	ms := 35
 	return time.Duration(ms) * time.Millisecond
 }
 
